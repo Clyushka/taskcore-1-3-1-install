@@ -6,45 +6,47 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-        File games_dir = new File ("Games"); // C:\Users\USER\IdeaProjects\TaskCore-1-3-1-Install\Games
-        if (games_dir.exists()) {
+        StringBuilder log = new StringBuilder();
+
+        File gamesDir = new File("Games"); // C:\Users\USER\IdeaProjects\TaskCore-1-3-1-Install\Games
+        if (gamesDir.exists()) {
             // Games/src/
-            File src_dir = new File(games_dir.getPath() + "\\src");
-            if (!src_dir.exists()) {
-                src_dir.mkdir();
+            File srcDir = new File(gamesDir.getPath() + "\\src");
+            if (!srcDir.exists()) {
+                srcDir.mkdir();
             }
-            File main_dir = new File(src_dir.getPath() + "\\main");
-            if (!main_dir.exists()) {
-                main_dir.mkdir();
+            File mainDir = new File(srcDir.getPath() + "\\main");
+            if (!mainDir.exists()) {
+                mainDir.mkdir();
             }
             // Games/src/main
             try {
-                new File(main_dir, "Main.java").createNewFile();
-                new File(main_dir, "Utils.java").createNewFile();
+                new File(mainDir, "Main.java").createNewFile();
+                new File(mainDir, "Utils.java").createNewFile();
             } catch (IOException e) {
                 System.out.println(e.getLocalizedMessage());
                 System.exit(0);
             }
 
             // Games/res/
-            File res_dir = new File(games_dir.getPath() + "\\res");
-            if (!res_dir.exists()) {
-                res_dir.mkdir();
+            File resDir = new File(gamesDir.getPath() + "\\res");
+            if (!resDir.exists()) {
+                resDir.mkdir();
             }
-            new File(res_dir.getPath() + "\\drawables").mkdir();
-            new File(res_dir.getPath() + "\\vectors").mkdir();
-            new File(res_dir.getPath() + "\\icons").mkdir();
+            new File(resDir.getPath() + "\\drawables").mkdir();
+            new File(resDir.getPath() + "\\vectors").mkdir();
+            new File(resDir.getPath() + "\\icons").mkdir();
 
             // Games/savegames/
-            new File(games_dir.getPath() + "\\savegames").mkdir();
+            new File(gamesDir.getPath() + "\\savegames").mkdir();
 
             // Games/temp/
-            File temp_dir = new File(games_dir.getPath() + "\\temp");
-            if (!temp_dir.exists()) {
-                temp_dir.mkdir();
+            File tempDir = new File(gamesDir.getPath() + "\\temp");
+            if (!tempDir.exists()) {
+                tempDir.mkdir();
             }
             try {
-                new File(temp_dir, "temp.txt").createNewFile();
+                new File(tempDir, "temp.txt").createNewFile();
             } catch (IOException e) {
                 System.out.println(e.getLocalizedMessage());
                 System.exit(0);
