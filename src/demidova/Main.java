@@ -1,58 +1,88 @@
 package demidova;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
+    public static DateTimeFormatter DTF = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss.SSS");
 
     public static void main(String[] args) {
-        StringBuilder log = new StringBuilder();
+        StringBuilder log = new StringBuilder("Install in folder: ");
 
         File gamesDir = new File("Games"); // C:\Users\USER\IdeaProjects\TaskCore-1-3-1-Install\Games
+        log.append(gamesDir.getAbsolutePath() + "\\\n\n");
+
         if (gamesDir.exists()) {
             // Games/src/
             File srcDir = new File(gamesDir.getPath() + "\\src");
-            if (!srcDir.exists()) {
-                srcDir.mkdir();
-            }
+            log.append(createdDirLog(srcDir, srcDir.mkdir()));
             File mainDir = new File(srcDir.getPath() + "\\main");
-            if (!mainDir.exists()) {
-                mainDir.mkdir();
-            }
+            log.append(createdDirLog(mainDir, mainDir.mkdir()));
             // Games/src/main
             try {
-                new File(mainDir, "Main.java").createNewFile();
-                new File(mainDir, "Utils.java").createNewFile();
+                File mainJavaFile = new File(mainDir, "Main.java");
+                log.append(createdFileLog(mainJavaFile, mainJavaFile.createNewFile()));
+
+                File utilsJavaFile = new File(mainDir, "Utils.java");
+                log.append(createdFileLog(utilsJavaFile, utilsJavaFile.createNewFile()));
+
             } catch (IOException e) {
-                System.out.println(e.getLocalizedMessage());
+                log.append(e.getLocalizedMessage());
                 System.exit(0);
             }
 
             // Games/res/
             File resDir = new File(gamesDir.getPath() + "\\res");
-            if (!resDir.exists()) {
-                resDir.mkdir();
-            }
-            new File(resDir.getPath() + "\\drawables").mkdir();
-            new File(resDir.getPath() + "\\vectors").mkdir();
-            new File(resDir.getPath() + "\\icons").mkdir();
+            log.append(createdDirLog(resDir, resDir.mkdir()));
+            File drawablesDir = new File(resDir.getPath() + "\\drawables");
+            log.append(createdDirLog(drawablesDir, drawablesDir.mkdir()));
+            File vectorsDir = new File(resDir.getPath() + "\\vectors");
+            log.append(createdDirLog(vectorsDir, vectorsDir.mkdir()));
+            File iconsDir = new File(resDir.getPath() + "\\icons");
+            log.append(createdDirLog(iconsDir, iconsDir.mkdir()));
 
             // Games/savegames/
-            new File(gamesDir.getPath() + "\\savegames").mkdir();
+            File savegamesDir = new File(gamesDir.getPath() + "\\savegames");
+            log.append(createdDirLog(savegamesDir, savegamesDir.mkdir()));
 
             // Games/temp/
             File tempDir = new File(gamesDir.getPath() + "\\temp");
-            if (!tempDir.exists()) {
-                tempDir.mkdir();
-            }
+            log.append(createdDirLog(tempDir, tempDir.mkdir()));
+            File tempTxtFile = new File(tempDir, "temp.txt");
             try {
-                new File(tempDir, "temp.txt").createNewFile();
+                log.append(createdFileLog(tempTxtFile, tempTxtFile.createNewFile()));
             } catch (IOException e) {
                 System.out.println(e.getLocalizedMessage());
                 System.exit(0);
             }
+
+            // write log to temp.txt
+            try (Writer logOutputStream = new FileWriter(tempTxtFile, false)) {
+                logOutputStream.write(log.toString());
+            } catch (IOException e) {
+                System.out.println(e.getLocalizedMessage());
+                System.exit(0);
+            }
+
         } else {
-            System.out.println("Нет такой директории");
+            System.out.println("Директория <..>/Games/ отсутствует");
+        }
+    }
+
+    public static String createdDirLog(File dir, boolean isCreated) {
+        if (isCreated) {
+            return dir.getPath() + "\\ was created at " + DTF.format(LocalDateTime.now()) + "\n";
+        } else {
+            return dir.getPath() + "\\ was NOT created \n";
+        }
+    }
+
+    public static String createdFileLog(File file, boolean isCreated) {
+        if (isCreated) {
+            return file.getPath() + " was created at " + DTF.format(LocalDateTime.now()) + "\n";
+        } else {
+            return file.getPath() + " was NOT created \n";
         }
     }
 }
